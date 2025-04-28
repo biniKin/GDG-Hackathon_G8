@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:safe_campus/features/core/presentation/bloc/NavigationCubit.dart';
+import 'package:safe_campus/features/core/presentation/screens/home.dart';
 import 'features/core/presentation/providers/auth/auth_bloc.dart';
 import 'features/core/presentation/screens/intro_page.dart';
 import 'features/core/presentation/screens/sign_in_page.dart';
@@ -17,6 +19,10 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => AuthBloc()),
+        BlocProvider(
+    create: (context) => NavigationCubit(),
+    child: Container(),
+  )
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
