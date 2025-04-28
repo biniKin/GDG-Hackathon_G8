@@ -20,9 +20,9 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(create: (_) => AuthBloc()),
         BlocProvider(
-    create: (context) => NavigationCubit(),
-    child: Container(),
-  )
+          create: (context) => NavigationCubit(),
+          child: Container(),
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -36,6 +36,7 @@ class MyApp extends StatelessWidget {
           '/': (context) => const IntroPage(),
           '/signin': (context) => const SignInPage(),
           '/register': (context) => const RegisterPage(),
+          '/home': (context) => const Home(),
         },
       ),
     );
