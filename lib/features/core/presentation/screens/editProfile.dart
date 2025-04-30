@@ -109,14 +109,14 @@ class _EditprofileState extends State<Editprofile> {
                       borderRadius: BorderRadius.circular(10),
                       child: Container(
                         decoration: BoxDecoration(
-                          color: Colors.grey,
+                          color: Colors.grey[300],
                           border: Border.all(
                             color: const Color.fromRGBO(117, 117, 117, 1),
                             width: 0.7,
                           ),
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        child: Icon(Icons.edit, color: Colors.black),
+                        child: Icon(Icons.camera_alt_outlined, color: Colors.black),
                       ),
                     ),
                   ),
