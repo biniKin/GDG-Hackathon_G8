@@ -34,7 +34,7 @@ class _ProfilepageState extends State<Profilepage> {
               width: double.infinity,
               height: 90,
               decoration: BoxDecoration(
-                color: Color.fromARGB(255, 231, 230, 235),
+                color: Color.fromARGB(255, 240, 239, 241),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Row(
@@ -228,7 +228,7 @@ Widget displayContainer(
     height: 60,
     padding: EdgeInsets.only(left: 15, right: 15),
     decoration: BoxDecoration(
-      color: Color.fromARGB(255, 231, 230, 235),
+      color: Color.fromARGB(255, 240, 239, 241),
       borderRadius: BorderRadius.circular(12),
     ),
     child: Row(
@@ -265,7 +265,7 @@ Widget displayContainer2(
     height: 60,
     padding: EdgeInsets.only(left: 15, right: 15),
     decoration: BoxDecoration(
-      color: Color.fromARGB(255, 231, 230, 235),
+      color: Color.fromARGB(255, 240, 239, 241),
       borderRadius: BorderRadius.circular(12),
     ),
     child: Row(
