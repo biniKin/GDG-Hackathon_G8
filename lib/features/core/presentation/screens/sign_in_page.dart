@@ -57,7 +57,7 @@ class SignInPage extends StatelessWidget {
                   ElevatedButton(
                     onPressed: () {
                       // Handle sign in logic here
-                      Navigator.pushNamed(context, '/home');
+                      Navigator.pushReplacementNamed(context, '/home');
                     },
                     style: ElevatedButton.styleFrom(
                       minimumSize: const Size(double.infinity, 50),

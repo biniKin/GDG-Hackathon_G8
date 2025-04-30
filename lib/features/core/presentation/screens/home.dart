@@ -23,12 +23,12 @@ class _HomeState extends State<Home> {
     return BlocBuilder<NavigationCubit, int>(
       builder: (context, selectedIndex) {
         return Scaffold(
-          appBar: AppBar(title: Text("SafeCampus")),
+          //appBar: AppBar(title: Text("SafeCampus"), automaticallyImplyLeading: false,),
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerDocked,
           floatingActionButton: FloatingActionButton(
             onPressed: () {},
-            backgroundColor: Colors.red,
+            backgroundColor: Colors.deepPurpleAccent,
             foregroundColor: Colors.white,
             shape: CircleBorder(),
             child: Text("SOS"),
