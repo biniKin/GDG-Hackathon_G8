@@ -34,7 +34,7 @@ class _ProfilepageState extends State<Profilepage> {
               width: double.infinity,
               height: 90,
               decoration: BoxDecoration(
-                color: Color(0xFFF5F5F5),
+                color: Color.fromARGB(255, 231, 230, 235),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Row(
@@ -42,9 +42,19 @@ class _ProfilepageState extends State<Profilepage> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: CircleAvatar(
-                      radius: 40,
-                      child: Icon(Icons.person, size: 40),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Color(0xFF65558F),
+                        shape: BoxShape.circle
+
+                      ),
+                      padding: EdgeInsets.all(0.7),
+                      child: CircleAvatar(
+                        backgroundColor: Colors.grey[300],
+                      
+                        radius: 40,
+                        child: Icon(Icons.person, size: 40),
+                      ),
                     ),
                   ),
                   //SizedBox(width: 3,),
@@ -60,7 +70,7 @@ class _ProfilepageState extends State<Profilepage> {
                             "Abel Mesfin",
                             style: GoogleFonts.poppins(
                               fontSize: 20,
-                              fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
                         ),
@@ -94,8 +104,8 @@ class _ProfilepageState extends State<Profilepage> {
                     child: Text(
                       "Account settings",
                       style: GoogleFonts.poppins(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w600,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
                         color: Color(0xFF7C7C7C),
                       ),
                     ),
@@ -118,7 +128,7 @@ class _ProfilepageState extends State<Profilepage> {
             Divider(),
             SizedBox(height: 7),
             SizedBox(
-              height: 200,
+              height: 180,
               width: double.infinity,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -128,8 +138,8 @@ class _ProfilepageState extends State<Profilepage> {
                     child: Text(
                       "Manage Notifications",
                       style: GoogleFonts.poppins(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w600,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
                         color: Color(0xFF7C7C7C),
                       ),
                     ),
@@ -169,13 +179,15 @@ class _ProfilepageState extends State<Profilepage> {
               height: 50,
 
               decoration: BoxDecoration(
-                color: Color(0xFFF5F5F5),
+                color: Color.fromARGB(255, 239, 239, 241),
                 borderRadius: BorderRadius.circular(30),
                 border: Border.all(width: 0.5, color: Colors.red),
               ),
               child: ElevatedButton(
                 style: ButtonStyle(
-                  backgroundColor: WidgetStatePropertyAll(Color(0xFFF5F5F5)),
+                  backgroundColor: WidgetStatePropertyAll(
+                    Color.fromARGB(255, 239, 239, 241),
+                  ),
                 ),
                 onPressed: () {
                   Navigator.pushReplacementNamed(context, '/signin');
@@ -216,7 +228,7 @@ Widget displayContainer(
     height: 60,
     padding: EdgeInsets.only(left: 15, right: 15),
     decoration: BoxDecoration(
-      color: Color.fromARGB(255, 242, 239, 239),
+      color: Color.fromARGB(255, 231, 230, 235),
       borderRadius: BorderRadius.circular(12),
     ),
     child: Row(
