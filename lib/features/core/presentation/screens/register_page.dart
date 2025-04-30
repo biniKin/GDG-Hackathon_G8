@@ -1,8 +1,41 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
-class RegisterPage extends StatelessWidget {
-  const RegisterPage({super.key});
+class RegisterPage extends StatefulWidget {
+  RegisterPage({super.key});
+
+  @override
+  State<RegisterPage> createState() => _RegisterPageState();
+}
+
+class _RegisterPageState extends State<RegisterPage> {
+  final _formKey = GlobalKey<FormState>();
+
+  final _fullNameController = TextEditingController();
+
+  final _emailController = TextEditingController();
+
+  final _studentIdController = TextEditingController();
+
+  final _passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    _fullNameController.dispose();
+    _emailController.dispose();
+    _studentIdController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  void _submitForm() {
+    if (_formKey.currentState!.validate()) {
+      Fluttertoast.showToast(msg: "Processing Data");
+      Navigator.of(context).pushReplacementNamed('/home');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -10,85 +43,131 @@ class RegisterPage extends StatelessWidget {
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [Color(0xFFECEAFF), Colors.white],
+            begin: Alignment.bottomCenter,
+            end: Alignment.topCenter,
+            colors: [
+              Color.fromARGB(255, 192, 186, 222),
+              Color.fromARGB(255, 223, 222, 236),
+            ],
           ),
         ),
         child: SafeArea(
           child: Center(
             child: SingleChildScrollView(
               padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Hello!',
-                    style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 8),
-                  const Text(
-                    'Welcome to SafeCampus!',
-                    style: TextStyle(fontSize: 16),
-                  ),
-                  const SizedBox(height: 40),
-                  TextFormField(
-                    decoration: const InputDecoration(
-                      labelText: 'Full name',
-                      prefixIcon: Icon(Icons.person),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  TextFormField(
-                    decoration: const InputDecoration(
-                      labelText: 'Email',
-                      prefixIcon: Icon(Icons.email),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  TextFormField(
-                    decoration: const InputDecoration(
-                      labelText: 'Student ID',
-                      prefixIcon: Icon(Icons.badge),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  TextFormField(
-                    decoration: const InputDecoration(
-                      labelText: 'Password',
-                      prefixIcon: Icon(Icons.lock),
-                    ),
-                    obscureText: true,
-                  ),
-                  const SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      minimumSize: const Size(double.infinity, 50),
-                      backgroundColor: Color(0xFF65558F),
-                    ),
-                    child: Text(
-                      'Register',
-                      style: GoogleFonts.poppins(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 17,
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Hello!',
+                      style: TextStyle(
+                        fontSize: 32,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text('Already have account?'),
-                      TextButton(
-                        onPressed:
-                            () => Navigator.pushNamed(context, '/signin'),
-                        child: const Text('Sign In'),
+                    const SizedBox(height: 8),
+                    const Text(
+                      'Welcome to SafeCampus!',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    const SizedBox(height: 40),
+                    TextFormField(
+                      controller: _fullNameController,
+                      decoration: const InputDecoration(
+                        labelText: 'Full name',
+                        prefixIcon: Icon(Icons.person),
                       ),
-                    ],
-                  ),
-                ],
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your full name';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 20),
+                    TextFormField(
+                      controller: _emailController,
+                      decoration: const InputDecoration(
+                        labelText: 'Email',
+                        prefixIcon: Icon(Icons.email),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Please enter your email";
+                        }
+                        if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
+                          return 'Enter a valid email';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 20),
+                    TextFormField(
+                      controller: _studentIdController,
+                      decoration: const InputDecoration(
+                        labelText: 'Student ID',
+                        prefixIcon: Icon(Icons.badge),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Please enter your student ID";
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 20),
+                    TextFormField(
+                      controller: _passwordController,
+                      decoration: const InputDecoration(
+                        labelText: 'Password',
+                        prefixIcon: Icon(Icons.lock),
+                      ),
+                      obscureText: true,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your password';
+                        }
+                        if (value.length < 6) {
+                          return 'Password must be at least 6 characters';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 20),
+                    ElevatedButton(
+                      onPressed: _submitForm,
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: const Size(double.infinity, 50),
+                        backgroundColor: Color(0xFF65558F),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      child: Text(
+                        'Register',
+                        style: GoogleFonts.poppins(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 17,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text('Already have account?'),
+                        TextButton(
+                          onPressed:
+                              () => Navigator.pushNamed(context, '/signin'),
+                          child: const Text('Sign In'),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

@@ -60,6 +60,9 @@ class _HomeState extends State<Home> {
                 onPressed: () {},
                 style: ButtonStyle(
                   backgroundColor: WidgetStatePropertyAll(Colors.red),
+                  shape: WidgetStatePropertyAll(RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ))
                 ),
                 child: Text(
                   "Send Alert",
@@ -89,7 +92,7 @@ class _HomeState extends State<Home> {
           body: pages[selectedIndex],
           bottomNavigationBar: BottomAppBar(
             notchMargin: 5,
-            color: Color(0xFFE8DEF8),
+            color: Color.fromARGB(255, 223, 222, 236),
             height: 70,
             shape: CircularNotchedRectangle(),
             child: Row(
@@ -112,7 +115,7 @@ class _HomeState extends State<Home> {
                 SizedBox(width: 40),
                 navItem(
                   context,
-                  icon: Icons.message,
+                  icon: Icons.notifications,
                   label: "Alerts",
                   index: 2,
                   selected: selectedIndex,
@@ -141,7 +144,7 @@ Widget navItem(
   required int selected,
 }) {
   final isSelected = selected == index;
-  final color = isSelected ? Color(0xFF65558F) : Colors.black;
+  final color = isSelected ? Color(0xFF65558F) : const Color.fromARGB(255, 124, 124, 124);
 
   return InkWell(
     onTap: () => context.read<NavigationCubit>().updateIndex(index),
