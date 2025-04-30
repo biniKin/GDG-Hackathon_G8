@@ -37,7 +37,7 @@ class _HomeState extends State<Home> {
           bottomNavigationBar: BottomAppBar(
             notchMargin: 5,
             color: Color(0xFFE8DEF8),
-            height: 65,
+            height: 70,
             shape: CircularNotchedRectangle(),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -51,8 +51,8 @@ class _HomeState extends State<Home> {
                 ),
                 navItem(
                   context,
-                  icon: Icons.search,
-                  label: "Search",
+                  icon: Icons.map,
+                  label: "Map",
                   index: 1,
                   selected: selectedIndex,
                 ),
@@ -60,7 +60,7 @@ class _HomeState extends State<Home> {
                 navItem(
                   context,
                   icon: Icons.message,
-                  label: "Messages",
+                  label: "Alerts",
                   index: 2,
                   selected: selectedIndex,
                 ),
@@ -88,18 +88,27 @@ Widget navItem(
   required int selected,
 }) {
   final isSelected = selected == index;
-  final color = isSelected ? Colors.deepPurpleAccent : Colors.grey;
+  final color = isSelected ? Color(0xFF65558F) : Colors.black;
 
-  return GestureDetector(
+  return InkWell(
     onTap: () => context.read<NavigationCubit>().updateIndex(index),
-    child: Column(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Icon(icon, size: 20, color: color),
-        SizedBox(height: 2),
-        Text(label, style: TextStyle(fontSize: 12, color: color)),
-      ],
+
+    child: Container(
+      width: 60,
+      height: 80,
+      decoration: BoxDecoration(
+        color: Colors.transparent,
+
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(icon, size: 25, color: color),
+          SizedBox(height: 2),
+          Text(label, style: TextStyle(fontSize: 12, color: color)),
+        ],
+      ),
     ),
   );
 }
