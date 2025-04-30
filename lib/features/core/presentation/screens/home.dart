@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:safe_campus/features/core/presentation/bloc/NavigationCubit.dart';
 import 'package:safe_campus/features/core/presentation/screens/HomePage.dart';
 import 'package:safe_campus/features/core/presentation/screens/alertPage.dart';
@@ -18,6 +19,58 @@ class _HomeState extends State<Home> {
 
   final List pages = [HomePage(), Mappage(), Alertpage(), Profilepage()];
 
+  void openDialogeBox() {
+    showDialog(
+      context: context,
+      builder:
+          (context) => AlertDialog(
+            backgroundColor: Colors.white,
+            title: Text(
+              "Confirm your request",
+              style: GoogleFonts.poppins(
+                fontWeight: FontWeight.w500,
+                fontSize: 22,
+              ),
+            ),
+            //content
+            content: SizedBox(
+              height: 280,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  //image
+                  Image(image: AssetImage('assets/images/alert1.png')),
+                  //text
+                  Text(
+                    "The alert will be send to security persons and trusted contacts with your location and personal information. Make sure you made the right request before sending alert!",
+                    style: GoogleFonts.poppins(),
+                  ),
+                ],
+              ),
+            ),
+            //action
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text("Cancle"),
+              ),
+              ElevatedButton(
+                onPressed: () {},
+                style: ButtonStyle(
+                  backgroundColor: WidgetStatePropertyAll(Colors.red),
+                ),
+                child: Text(
+                  "Send Alert",
+                  style: GoogleFonts.poppins(color: Colors.white),
+                ),
+              ),
+            ],
+          ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<NavigationCubit, int>(
@@ -27,7 +80,7 @@ class _HomeState extends State<Home> {
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerDocked,
           floatingActionButton: FloatingActionButton(
-            onPressed: () {},
+            onPressed: openDialogeBox,
             backgroundColor: Colors.deepPurpleAccent,
             foregroundColor: Colors.white,
             shape: CircleBorder(),
@@ -96,10 +149,7 @@ Widget navItem(
     child: Container(
       width: 60,
       height: 80,
-      decoration: BoxDecoration(
-        color: Colors.transparent,
-
-      ),
+      decoration: BoxDecoration(color: Colors.transparent),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,

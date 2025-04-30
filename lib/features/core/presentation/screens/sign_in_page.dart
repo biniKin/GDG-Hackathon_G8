@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class SignInPage extends StatelessWidget {
   const SignInPage({super.key});
@@ -61,8 +62,16 @@ class SignInPage extends StatelessWidget {
                     },
                     style: ElevatedButton.styleFrom(
                       minimumSize: const Size(double.infinity, 50),
+                      backgroundColor: Color(0xFF65558F),
                     ),
-                    child: const Text('Sign In'),
+                    child: Text(
+                      'Sign In',
+                      style: GoogleFonts.poppins(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 17
+                      ),
+                    ),
                   ),
                   const SizedBox(height: 20),
                   Row(
