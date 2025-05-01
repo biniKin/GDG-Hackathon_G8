@@ -86,10 +86,9 @@ class _HomeState extends State<Home> {
             onPressed: openDialogeBox,
             backgroundColor: Colors.deepPurpleAccent,
             foregroundColor: Colors.white,
-            shape: CircleBorder(),
-            child: Text("SOS"),
+            shape: const CircleBorder(),
+            child: const Text("SOS"),
           ),
-          body: pages[selectedIndex],
           bottomNavigationBar: BottomAppBar(
             notchMargin: 5,
             color: Color.fromARGB(255, 223, 222, 236),
