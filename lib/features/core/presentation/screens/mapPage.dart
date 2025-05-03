@@ -45,21 +45,25 @@ class _MapPageState extends State<MapPage> {
             ],
           ),
           actions: [
-            IconButton(
-              icon: const Icon(Icons.report),
-              onPressed: () {
-                DefaultTabController.of(context).index = 1; // Switch to SafetyMap tab
-                _safetyMapKey.currentState?.reportIncident();
-              },
-              tooltip: "Report Incident",
+            Builder(
+              builder: (context) => IconButton(
+                icon: const Icon(Icons.report),
+                onPressed: () {
+                  DefaultTabController.of(context).index = 1; // Switch to SafetyMap tab
+                  _safetyMapKey.currentState?.reportIncident();
+                },
+                tooltip: "Report Incident",
+              ),
             ),
-            IconButton(
-              icon: const Icon(Icons.share),
-              onPressed: () {
-                DefaultTabController.of(context).index = 1; // Switch to SafetyMap tab
-                _safetyMapKey.currentState?.shareRoute();
-              },
-              tooltip: "Share Route",
+            Builder(
+              builder: (context) => IconButton(
+                icon: const Icon(Icons.share),
+                onPressed: () {
+                  DefaultTabController.of(context).index = 1; // Switch to SafetyMap tab
+                  _safetyMapKey.currentState?.shareRoute();
+                },
+                tooltip: "Share Route",
+              ),
             ),
           ],
         ),
@@ -74,14 +78,16 @@ class _MapPageState extends State<MapPage> {
             ),
           ],
         ),
-        floatingActionButton: FloatingActionButton(
-          elevation: 0,
-          onPressed: () {
-            DefaultTabController.of(context).index = 1; // Switch to SafetyMap tab
-            _safetyMapKey.currentState?.userCurrentLocation();
-          },
-          backgroundColor: Colors.blue,
-          child: const Icon(Icons.my_location, size: 30, color: Colors.white),
+        floatingActionButton: Builder(
+          builder: (context) => FloatingActionButton(
+            elevation: 0,
+            onPressed: () {
+              DefaultTabController.of(context).index = 1; // Switch to SafetyMap tab
+              _safetyMapKey.currentState?.userCurrentLocation();
+            },
+            backgroundColor: Colors.blue,
+            child: const Icon(Icons.my_location, size: 30, color: Colors.white),
+          ),
         ),
       ),
     );
