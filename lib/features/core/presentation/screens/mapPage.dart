@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:safe_campus/features/core/presentation/screens/HomePage.dart';
+
+import 'package:safe_campus/features/core/presentation/screens/liveTracker.dart';
 import 'package:safe_campus/features/core/presentation/screens/safetyMap.dart';
 
 class MapPage extends StatefulWidget {
@@ -26,13 +28,12 @@ class _MapPageState extends State<MapPage> {
               fontWeight: FontWeight.bold,
             ),
           ),
-          backgroundColor: Colors.deepPurple,
+          backgroundColor: Colors.deepPurpleAccent,
           foregroundColor: Colors.white,
-         
           bottom: TabBar(
-            labelStyle: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w500, color: Colors.white),
+            labelStyle: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w500),
             tabs: const [
-              Tab(text: "Live Tracker",),
+              Tab(text: "Live Tracker"),
               Tab(text: "Safety Map"),
             ],
           ),
@@ -61,7 +62,7 @@ class _MapPageState extends State<MapPage> {
         ),
         body: TabBarView(
           children: [
-            const Center(child: Text('Live Tracker (Coming Soon)')),
+            const LiveTracker(),
             SafetyMap(
               key: _safetyMapKey,
               onReportIncident: () => _safetyMapKey.currentState?.reportIncident(),
