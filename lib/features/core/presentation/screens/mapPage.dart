@@ -29,7 +29,7 @@ class Mappage extends StatelessWidget {
           child: TabBarView(
             children: [
               Livetracker(),
-              Safetymap(),
+              SafetyMap(),
             ]
           ),
         ),
