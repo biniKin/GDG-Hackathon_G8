@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:safe_campus/features/core/presentation/bloc/NavigationCubit.dart';
-import 'package:safe_campus/features/core/presentation/screens/components/report_incident_bottom_sheet.dart';
-import 'package:safe_campus/features/core/presentation/screens/components/share_route_bottom_sheet.dart';
-import 'package:safe_campus/features/core/presentation/screens/components/contact_form_bottom_sheet.dart';
+import 'components/report_incident_bottom_sheet.dart';
+import 'components/share_route_bottom_sheet.dart';
+import 'components/contact_form_bottom_sheet.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -14,11 +12,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  bool showContacts = false;
-  bool showActivities = false;
-
-  List<Map<String, String>> contacts = [];
   List<Map<String, String>> recentActivities = [];
+  List<Map<String, String>> contacts = [];
+  bool showAllContacts = false;
+  bool showAllActivities = false;
 
   void openReportIncidentSheet() async {
     final result = await showModalBottomSheet<Map<String, String>>(
@@ -26,7 +23,7 @@ class _HomePageState extends State<HomePage> {
       isScrollControlled: true,
       builder: (context) => ReportIncidentBottomSheet(
         onSubmit: (name, description) {
-          return {'name': name, 'description': description};
+          Navigator.of(context).pop({'name': name, 'description': description});
         },
       ),
     );
@@ -41,7 +38,8 @@ class _HomePageState extends State<HomePage> {
   void openShareRouteSheet() {
     showModalBottomSheet(
       context: context,
-      builder: (context) => const ShareRouteBottomSheet(),
+      isScrollControlled: true,
+      builder: (_) => const ShareRouteBottomSheet(),
     );
   }
 
@@ -56,112 +54,99 @@ class _HomePageState extends State<HomePage> {
       ),
     );
 
-    if (result != null) {
+    if (result != null && mounted) {
       setState(() {
         contacts.add(result);
       });
     }
   }
 
-  void openSOSDialog() {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: Colors.white,
-        title: Text(
-          "Confirm your request",
-          style: GoogleFonts.poppins(
-            fontWeight: FontWeight.w500,
-            fontSize: 22,
+  Widget _buildRoundedIconButton({
+    required IconData icon,
+    required String label,
+    required VoidCallback onPressed,
+  }) {
+    return GestureDetector(
+      onTap: onPressed,
+      child: Container(
+        width: 150,
+        height: 100,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          gradient: const LinearGradient(
+            colors: [Color(0xFFF6F2FF), Color(0xFFEDE7F6)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
           ),
-        ),
-        content: SizedBox(
-          height: 280,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Image.asset('assets/images/alert1.png'),
-              Text(
-                "The alert will be sent to security and trusted contacts with your location and info. Confirm before sending!",
-                style: GoogleFonts.poppins(),
-              ),
-            ],
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text("Cancel"),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              // TODO: Trigger actual alert logic
-              Navigator.of(context).pop();
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.red,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black12,
+              blurRadius: 4,
+              offset: Offset(2, 4),
             ),
-            child: Text(
-              "Send Alert",
-              style: GoogleFonts.poppins(color: Colors.white),
+          ],
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, size: 32, color: Colors.black),
+            const SizedBox(height: 8),
+            Text(
+              label,
+              textAlign: TextAlign.center,
+              style: GoogleFonts.poppins(fontSize: 14, color: Colors.black),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<NavigationCubit, int>(
-      builder: (context, selectedIndex) {
-        return Scaffold(
-          extendBody: true,
-          floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-          floatingActionButton: FloatingActionButton(
-            onPressed: openSOSDialog,
-            backgroundColor: Colors.red,
-            foregroundColor: Colors.white,
-            shape: const CircleBorder(),
-            child: const Text("SOS"),
-          ),
-          body: Stack(
-            children: [
-              // Quarter-circle background
-              Positioned(
-                top: 0,
-                left: 0,
-                child: Container(
-                  width: 220,
-                  height: 125,
-                  decoration: const BoxDecoration(
-                    color: Color(0xFFE8DEF8),
-                    borderRadius: BorderRadius.only(
-                      bottomRight: Radius.circular(358),
-                    ),
+    final screenWidth = MediaQuery.of(context).size.width;
+
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: Stack(
+          children: [
+            // Quarter-circle background
+            Positioned(
+              top: 0,
+              left: 0,
+              child: Container(
+                width: 210,
+                height: 80,
+                decoration: const BoxDecoration(
+                  color: Color(0xFFE8DEF8), // 78% opacity of B7AFE7
+                  borderRadius: BorderRadius.only(
+                    bottomRight: Radius.circular(358),
                   ),
                 ),
               ),
-              SafeArea(
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Header
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "SafeCampus",
+            ),
+            SingleChildScrollView(
+              child: Column(
+                children: [
+                  const SizedBox(height: 20), // Space under status bar
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Stack(
+                      children: [
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "SafeCampus", 
                             style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                                  fontWeight: FontWeight.w600,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold
                                 ),
                           ),
-                          ClipRRect(
+                        ),
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: ClipRRect(
                             borderRadius: BorderRadius.circular(12),
                             child: Image.asset(
                               'assets/images/happy_ppl.png',
@@ -170,88 +155,205 @@ class _HomePageState extends State<HomePage> {
                               fit: BoxFit.cover,
                             ),
                           ),
-                        ],
-                      ),
-                      const SizedBox(height: 24),
-
-                      // Buttons
-                      ElevatedButton(
-                        onPressed: openShareRouteSheet,
-                        child: const Text("Share My Route"),
-                      ),
-                      const SizedBox(height: 10),
-                      ElevatedButton(
-                        onPressed: openReportIncidentSheet,
-                        child: const Text("Report Incidents"),
-                      ),
-                      const SizedBox(height: 24),
-
-                      // Trusted Contacts
-                      GestureDetector(
-                        onTap: () => setState(() => showContacts = !showContacts),
-                        child: Container(
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            color: Colors.deepPurple.shade50,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Text("Trusted Contacts"),
-                              Icon(showContacts ? Icons.expand_less : Icons.expand_more),
-                            ],
-                          ),
                         ),
-                      ),
-                      if (showContacts) ...[
-                        const SizedBox(height: 10),
-                        ElevatedButton(
-                          onPressed: openManageContactsSheet,
-                          child: const Text("Manage Contacts"),
-                        ),
-                        const SizedBox(height: 10),
-                        ...contacts.map((c) => ListTile(
-                              title: Text(c['name'] ?? ''),
-                              subtitle: Text(c['phone'] ?? ''),
-                            )),
                       ],
-
-                      const SizedBox(height: 24),
-
-                      // Recent Activities
-                      GestureDetector(
-                        onTap: () => setState(() => showActivities = !showActivities),
-                        child: Container(
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            color: Colors.red.shade50,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Text("Recent Activities"),
-                              Icon(showActivities ? Icons.expand_less : Icons.expand_more),
-                            ],
-                          ),
-                        ),
-                      ),
-                      if (showActivities) ...[
-                        const SizedBox(height: 10),
-                        ...recentActivities.map((act) => ListTile(
-                              title: Text(act['name'] ?? ''),
-                              subtitle: Text(act['description'] ?? ''),
-                            )),
-                      ],
-                    ],
+                    ),
                   ),
-                ),
+                  const SizedBox(height: 40),
+                  SingleChildScrollView(
+                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 30),
+                    child: Column(
+                      children: [
+                        // Share and Report buttons
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Container(
+                                height: 120,
+                                decoration: BoxDecoration(
+                                  gradient: const LinearGradient(
+                                    colors: [Color(0xFFF1EBFF), Color(0xFFEDEBFF)],
+                                  ),
+                                  borderRadius: BorderRadius.circular(20),
+                                  boxShadow: const [
+                                    BoxShadow(
+                                      color: Colors.black12,
+                                      blurRadius: 5,
+                                      offset: Offset(2, 4),
+                                    )
+                                  ],
+                                ),
+                                child: InkWell(
+                                  onTap: openShareRouteSheet,
+                                  borderRadius: BorderRadius.circular(20),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: const [
+                                      Icon(Icons.share, size: 40),
+                                      SizedBox(height: 8),
+                                      Text("Share my routes", style: TextStyle(fontSize: 14)),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 20),
+                            Expanded(
+                              child: Container(
+                                height: 120,
+                                decoration: BoxDecoration(
+                                  gradient: const LinearGradient(
+                                    colors: [Color(0xFFF1EBFF), Color(0xFFEDEBFF)],
+                                  ),
+                                  borderRadius: BorderRadius.circular(20),
+                                  boxShadow: const [
+                                    BoxShadow(
+                                      color: Colors.black12,
+                                      blurRadius: 5,
+                                      offset: Offset(2, 4),
+                                    )
+                                  ],
+                                ),
+                                child: InkWell(
+                                  onTap: openReportIncidentSheet,
+                                  borderRadius: BorderRadius.circular(20),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: const [
+                                      Icon(Icons.assignment, size: 40),
+                                      SizedBox(height: 8),
+                                      Text("Report incidents", style: TextStyle(fontSize: 14)),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 30),
+
+                        // Trusted Contacts Section
+                        GestureDetector(
+                          onTap: () => setState(() => showAllContacts = !showAllContacts),
+                          child: Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey.shade300),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("Trusted contacts",
+                                    style: GoogleFonts.poppins(fontWeight: FontWeight.bold, fontSize: 16)),
+                                const SizedBox(height: 6),
+                                Text(
+                                    "people who can see your location during emergencies",
+                                    style: GoogleFonts.poppins(color: Colors.grey, fontSize: 13)),
+                                const SizedBox(height: 20),
+
+                                if (showAllContacts)
+                                  Column(
+                                    children: contacts
+                                        .map((c) => ListTile(
+                                              title: Text(c['name'] ?? '', style: GoogleFonts.poppins()),
+                                              subtitle: Text(c['phone'] ?? '',
+                                                  style: GoogleFonts.poppins(fontSize: 12)),
+                                            ))
+                                        .toList(),
+                                  ),
+
+                                const SizedBox(height: 10),
+                                Center(
+                                  child: Container(
+                                    width: screenWidth * 0.6,
+                                    height: 45,
+                                    decoration: BoxDecoration(
+                                      gradient: const LinearGradient(
+                                        colors: [Color(0xFFF1EBFF), Color(0xFFEDEBFF)],
+                                      ),
+                                      borderRadius: BorderRadius.circular(12),
+                                      boxShadow: const [
+                                        BoxShadow(
+                                          color: Colors.black12,
+                                          blurRadius: 5,
+                                          offset: Offset(2, 4),
+                                        )
+                                      ],
+                                    ),
+                                    child: TextButton.icon(
+                                      onPressed: openManageContactsSheet,
+                                      icon: const Icon(Icons.manage_accounts, color: Colors.black),
+                                      label: Text("Manage contacts",
+                                          style: GoogleFonts.poppins(color: Colors.black)),
+                                      style: TextButton.styleFrom(
+                                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+
+                        const SizedBox(height: 20),
+
+                        // Recent Activities Section
+                        GestureDetector(
+                          onTap: () => setState(() => showAllActivities = !showAllActivities),
+                          child: Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey.shade300),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("Recent Activities",
+                                    style: GoogleFonts.poppins(fontWeight: FontWeight.bold, fontSize: 16)),
+                                const SizedBox(height: 6),
+                                Text("your recent safety actions",
+                                    style: GoogleFonts.poppins(color: Colors.grey, fontSize: 13)),
+                                const SizedBox(height: 20),
+
+                                if (showAllActivities)
+                                  Column(
+                                    children: recentActivities
+                                        .map((act) => ListTile(
+                                              title: Text(act['name'] ?? '', style: GoogleFonts.poppins()),
+                                              subtitle: Text(act['description'] ?? '',
+                                                  style: GoogleFonts.poppins(fontSize: 12)),
+                                            ))
+                                        .toList(),
+                                  )
+                                else if (recentActivities.isEmpty)
+                                  Center(
+                                    child: Column(
+                                      children: [
+                                        const Icon(Icons.history, size: 36, color: Colors.grey),
+                                        const SizedBox(height: 10),
+                                        Text("No data has found",
+                                            style: GoogleFonts.poppins(fontSize: 14, color: Colors.grey)),
+                                      ],
+                                    ),
+                                  )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
-        );
-      },
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
