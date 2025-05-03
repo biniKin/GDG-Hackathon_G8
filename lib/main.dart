@@ -6,6 +6,8 @@ import 'features/core/presentation/providers/auth/auth_bloc.dart';
 import 'features/core/presentation/screens/intro_page.dart';
 import 'features/core/presentation/screens/sign_in_page.dart';
 import 'features/core/presentation/screens/register_page.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 void main() {
   runApp(const MyApp());
