@@ -10,13 +10,22 @@ import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
 
 class SafetyMap extends StatefulWidget {
-  const SafetyMap({super.key});
+  final VoidCallback onReportIncident;
+  final VoidCallback onShareRoute;
+  final VoidCallback onUserCurrentLocation;
+
+  const SafetyMap({
+    super.key,
+    required this.onReportIncident,
+    required this.onShareRoute,
+    required this.onUserCurrentLocation,
+  });
 
   @override
-  State<SafetyMap> createState() => _SafetyMapState();
+  State<SafetyMap> createState() => SafetyMapState();
 }
 
-class _SafetyMapState extends State<SafetyMap> {
+class SafetyMapState extends State<SafetyMap> {
   final MapController _mapController = MapController();
   final Location _location = Location();
   final TextEditingController _locationController = TextEditingController();
@@ -122,7 +131,7 @@ class _SafetyMapState extends State<SafetyMap> {
     return true;
   }
 
-  void _userCurrentLocation() {
+  void userCurrentLocation() {
     if (_currentLocation != null) {
       _mapController.move(_currentLocation!, 15);
     } else {
@@ -136,7 +145,7 @@ class _SafetyMapState extends State<SafetyMap> {
     );
   }
 
-  void _shareRoute() {
+  void shareRoute() {
     if (_route.isNotEmpty && _currentLocation != null) {
       setState(() {
         _shareToken = uuid.v4();
@@ -170,7 +179,7 @@ class _SafetyMapState extends State<SafetyMap> {
     }
   }
 
-  void _reportIncident() async {
+  void reportIncident() async {
     final picker = ImagePicker();
     showModalBottomSheet(
       context: context,

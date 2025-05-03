@@ -17,7 +17,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final List pages = [
     HomePage(),
-    Mappage(),
+    MapPage(),
     Alertpage(),
     Profilepage(),
   ];
