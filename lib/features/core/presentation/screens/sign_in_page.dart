@@ -119,11 +119,7 @@ class _SignInPageState extends State<SignInPage> {
                       ),
                       child: Text(
                         'Sign In',
-                        style: GoogleFonts.poppins(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 17,
-                        ),
+                        style: GoogleFonts.poppins(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
                       ),
                     ),
                     const SizedBox(height: 20),

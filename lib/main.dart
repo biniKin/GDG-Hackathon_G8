@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:safe_campus/features/core/data/repositories/auth_repo.dart';
 import 'package:safe_campus/features/core/presentation/bloc/NavigationCubit.dart';
 import 'package:safe_campus/features/core/presentation/screens/home.dart';
 import 'features/core/presentation/providers/auth/auth_bloc.dart';
@@ -16,13 +17,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+     final authRepo = AuthRepo();
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (_) => AuthBloc()),
+        BlocProvider(create: (context)=> AuthBloc(authRepo: authRepo)),
         BlocProvider(
-          create: (context) => NavigationCubit(),
-          child: Container(),
-        ),
+          create: (context) => NavigationCubit(),),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
