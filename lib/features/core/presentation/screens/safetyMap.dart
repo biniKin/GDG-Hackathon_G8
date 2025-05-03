@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -25,7 +26,7 @@ class SafetyMap extends StatefulWidget {
   State<SafetyMap> createState() => SafetyMapState();
 }
 
-class SafetyMapState extends State<SafetyMap> {
+class SafetyMapState extends State<SafetyMap> with AutomaticKeepAliveClientMixin {
   final MapController _mapController = MapController();
   final Location _location = Location();
   final TextEditingController _locationController = TextEditingController();
@@ -37,16 +38,37 @@ class SafetyMapState extends State<SafetyMap> {
   List<Map<String, dynamic>> _incidentReports = [
     {'location': LatLng(37.7749, -122.4194), 'description': 'Suspicious activity'},
     {'location': LatLng(37.7849, -122.4294), 'description': 'Low visibility area'},
-  ]; // Simulated danger zones
+  ];
   String? _shareToken;
   final uuid = Uuid();
   XFile? _selectedMedia;
+  bool _isActive = false;
+  StreamSubscription<LocationData>? _locationSubscription;
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void initState() {
     super.initState();
     _initializeLocation();
     _checkForNearbyIncidents();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final newIsActive = DefaultTabController.of(context).index == 0; // SafetyMap is now at index 0
+    if (_isActive != newIsActive) {
+      setState(() {
+        _isActive = newIsActive;
+      });
+      if (_isActive) {
+        _startLocationUpdates();
+      } else {
+        _stopLocationUpdates();
+      }
+    }
   }
 
   Future<void> _initializeLocation() async {
@@ -57,7 +79,14 @@ class SafetyMapState extends State<SafetyMap> {
       return;
     }
 
-    _location.onLocationChanged.listen((LocationData locationData) {
+    if (_isActive) {
+      _startLocationUpdates();
+    }
+  }
+
+  void _startLocationUpdates() {
+    if (_locationSubscription != null) return; // Already listening
+    _locationSubscription = _location.onLocationChanged.listen((LocationData locationData) {
       if (locationData.latitude != null && locationData.longitude != null) {
         setState(() {
           _currentLocation = LatLng(locationData.latitude!, locationData.longitude!);
@@ -66,6 +95,11 @@ class SafetyMapState extends State<SafetyMap> {
         _checkForNearbyIncidents();
       }
     });
+  }
+
+  void _stopLocationUpdates() {
+    _locationSubscription?.cancel();
+    _locationSubscription = null;
   }
 
   Future<void> fetchCoordinatesPoint(String location) async {
@@ -173,7 +207,6 @@ class SafetyMapState extends State<SafetyMap> {
           ],
         ),
       );
-      // Simulate sending token to backend for real-time tracking
     } else {
       errorMessage("No route to share");
     }
@@ -295,7 +328,16 @@ class SafetyMapState extends State<SafetyMap> {
   }
 
   @override
+  void dispose() {
+    _stopLocationUpdates();
+    _locationController.dispose();
+    _incidentDescriptionController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context); // Required for AutomaticKeepAliveClientMixin
     return isLoading
         ? const Center(child: CircularProgressIndicator())
         : _currentLocation == null

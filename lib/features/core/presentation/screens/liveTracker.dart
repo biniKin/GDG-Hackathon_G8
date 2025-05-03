@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 import 'package:uuid/uuid.dart';
@@ -9,17 +11,38 @@ class LiveTracker extends StatefulWidget {
   State<LiveTracker> createState() => _LiveTrackerState();
 }
 
-class _LiveTrackerState extends State<LiveTracker> {
+class _LiveTrackerState extends State<LiveTracker> with AutomaticKeepAliveClientMixin {
   final Location _location = Location();
   final uuid = Uuid();
   LocationData? _currentLocation;
   bool _isLoading = true;
   String? _shareToken;
+  bool _isActive = false;
+  StreamSubscription<LocationData>? _locationSubscription;
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void initState() {
     super.initState();
     _initializeLocation();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final newIsActive = DefaultTabController.of(context).index == 1; // LiveTracker is now at index 1
+    if (_isActive != newIsActive) {
+      setState(() {
+        _isActive = newIsActive;
+      });
+      if (_isActive) {
+        _startLocationUpdates();
+      } else {
+        _stopLocationUpdates();
+      }
+    }
   }
 
   Future<void> _initializeLocation() async {
@@ -50,13 +73,25 @@ class _LiveTrackerState extends State<LiveTracker> {
       }
     }
 
-    // Start listening to location updates
-    _location.onLocationChanged.listen((LocationData locationData) {
+    // Start listening if the tab is active
+    if (_isActive) {
+      _startLocationUpdates();
+    }
+  }
+
+  void _startLocationUpdates() {
+    if (_locationSubscription != null) return; // Already listening
+    _locationSubscription = _location.onLocationChanged.listen((LocationData locationData) {
       setState(() {
         _currentLocation = locationData;
         _isLoading = false;
       });
     });
+  }
+
+  void _stopLocationUpdates() {
+    _locationSubscription?.cancel();
+    _locationSubscription = null;
   }
 
   void _shareRoute() {
@@ -97,7 +132,6 @@ class _LiveTrackerState extends State<LiveTracker> {
     );
 
     // Simulate sending token to backend for real-time tracking
-    // In a real app, you'd send _currentLocation and _shareToken to a backend
   }
 
   void _showSnackBar(String message) {
@@ -107,7 +141,14 @@ class _LiveTrackerState extends State<LiveTracker> {
   }
 
   @override
+  void dispose() {
+    _stopLocationUpdates();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context); // Required for AutomaticKeepAliveClientMixin
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
@@ -149,7 +190,7 @@ class _LiveTrackerState extends State<LiveTracker> {
               icon: const Icon(Icons.share),
               label: const Text("Share My Walk"),
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.deepPurpleAccent,
+                backgroundColor: Colors.blue,
                 foregroundColor: Colors.white,
               ),
             ),
