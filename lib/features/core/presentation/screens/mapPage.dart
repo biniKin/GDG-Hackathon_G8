@@ -26,21 +26,13 @@ class _MapPageState extends State<MapPage> {
               fontWeight: FontWeight.bold,
             ),
           ),
-          backgroundColor: Colors.blue,
+          backgroundColor: Colors.deepPurple,
           foregroundColor: Colors.white,
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => const HomePage()),
-              );
-            },
-          ),
+         
           bottom: TabBar(
-            labelStyle: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w500),
+            labelStyle: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w500, color: Colors.white),
             tabs: const [
-              Tab(text: "Live Tracker"),
+              Tab(text: "Live Tracker",),
               Tab(text: "Safety Map"),
             ],
           ),
