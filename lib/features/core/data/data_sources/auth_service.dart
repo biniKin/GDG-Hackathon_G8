@@ -1,5 +1,4 @@
-// 192.168.1.6
-// https://safe-campus-backend.onrender.com/api/auth
+
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
