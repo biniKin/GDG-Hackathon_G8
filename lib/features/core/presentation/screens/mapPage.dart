@@ -20,7 +20,9 @@ class _MapPageState extends State<MapPage> {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
+        
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           title: Text(
             "Map",
             style: GoogleFonts.poppins(
@@ -30,15 +32,7 @@ class _MapPageState extends State<MapPage> {
           ),
           backgroundColor: Colors.deepPurpleAccent,
           foregroundColor: Colors.white,
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => const HomePage()),
-              );
-            },
-          ),
+         
           bottom: TabBar(
             labelStyle: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w500),
             labelColor: Colors.white, // Set the text color for the selected tab

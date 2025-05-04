@@ -9,6 +9,7 @@ import 'package:location/location.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class SafetyMap extends StatefulWidget {
   final VoidCallback onReportIncident;
@@ -58,7 +59,7 @@ class SafetyMapState extends State<SafetyMap> with AutomaticKeepAliveClientMixin
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final newIsActive = DefaultTabController.of(context).index == 0; // SafetyMap is now at index 0
+    final newIsActive = DefaultTabController.of(context).index == 0; // SafetyMap is at index 0
     if (_isActive != newIsActive) {
       setState(() {
         _isActive = newIsActive;
@@ -100,6 +101,17 @@ class SafetyMapState extends State<SafetyMap> with AutomaticKeepAliveClientMixin
   void _stopLocationUpdates() {
     _locationSubscription?.cancel();
     _locationSubscription = null;
+  }
+
+  void _toggleTracking() {
+    setState(() {
+      _isActive = !_isActive;
+    });
+    if (_isActive) {
+      _startLocationUpdates();
+    } else {
+      _stopLocationUpdates();
+    }
   }
 
   Future<void> fetchCoordinatesPoint(String location) async {
@@ -410,6 +422,23 @@ class SafetyMapState extends State<SafetyMap> with AutomaticKeepAliveClientMixin
                           icon: Icon(Icons.search),
                           onPressed: () => fetchCoordinatesPoint(_locationController.text),
                         ),
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    bottom: 16,
+                    left: 16,
+                    right: 16,
+                    child: FloatingActionButton.extended(
+                      onPressed: _toggleTracking,
+                      backgroundColor: _isActive ? Colors.red : Colors.green,
+                      label: Text(
+                        _isActive ? 'Stop Tracking' : 'Start Tracking',
+                        style: GoogleFonts.poppins(fontSize: 16, color: Colors.white),
+                      ),
+                      icon: Icon(
+                        _isActive ? Icons.stop : Icons.play_arrow,
+                        color: Colors.white,
                       ),
                     ),
                   ),

@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'components/report_incident_bottom_sheet.dart';
 import 'components/share_route_bottom_sheet.dart';
 import 'components/contact_form_bottom_sheet.dart';
-
+import 'package:safe_campus/features/core/presentation/screens/mapPage.dart';
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -39,7 +39,134 @@ class _HomePageState extends State<HomePage> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      builder: (_) => const ShareRouteBottomSheet(),
+      builder: (context) => Container(
+        padding: const EdgeInsets.all(20),
+        height: 400,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Share Location",
+                  style: GoogleFonts.poppins(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.close),
+                  onPressed: () => Navigator.pop(context),
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+            Row(
+              children: [
+                const Icon(Icons.location_on, color: Colors.blue, size: 30),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    "Let trusted people know where you are in real-time",
+                    style: GoogleFonts.poppins(fontSize: 14),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+            Row(
+              children: [
+                const Icon(Icons.directions_walk, color: Colors.blue, size: 30),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    "Track your movement in real-time",
+                    style: GoogleFonts.poppins(fontSize: 14),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+            Row(
+              children: [
+                const Icon(Icons.share, color: Colors.blue, size: 30),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    "Share your location with trusted contacts",
+                    style: GoogleFonts.poppins(fontSize: 14),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+            Row(
+              children: [
+                const Icon(Icons.emergency, color: Colors.red, size: 30),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    "Emergency mode for quick alert",
+                    style: GoogleFonts.poppins(fontSize: 14),
+                  ),
+                ),
+              ],
+            ),
+            const Spacer(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: OutlinedButton(
+                    onPressed: () => Navigator.pop(context),
+                    style: OutlinedButton.styleFrom(
+                      side: const BorderSide(color: Colors.grey),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      padding: const EdgeInsets.symmetric(vertical: 15),
+                    ),
+                    child: Text(
+                      "Later",
+                      style: GoogleFonts.poppins(
+                        fontSize: 16,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const MapPage()),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      padding: const EdgeInsets.symmetric(vertical: 15),
+                    ),
+                    child: Text(
+                      "Start Sharing",
+                      style: GoogleFonts.poppins(
+                        fontSize: 16,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -137,10 +264,10 @@ class _HomePageState extends State<HomePage> {
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            "SafeCampus", 
+                            "SafeCampus",
                             style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                                   color: Colors.black,
-                                  fontWeight: FontWeight.bold
+                                  fontWeight: FontWeight.bold,
                                 ),
                           ),
                         ),
@@ -357,3 +484,4 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
+
