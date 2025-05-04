@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:safe_campus/features/core/data/data_sources/sos_service.dart';
 import 'package:safe_campus/features/core/presentation/bloc/NavigationCubit.dart';
 import 'package:safe_campus/features/core/presentation/screens/HomePage.dart';
 import 'package:safe_campus/features/core/presentation/screens/alertPage.dart';
@@ -55,9 +56,9 @@ class _HomeState extends State<Home> {
             child: Text("Cancel"),
           ),
           ElevatedButton(
-            onPressed: () {
+            onPressed: () async {
               // Add alert sending logic here
-              Navigator.of(context).pop();
+               //await sendSos(userToken);
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.red,

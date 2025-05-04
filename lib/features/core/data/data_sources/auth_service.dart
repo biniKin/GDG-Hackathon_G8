@@ -1,13 +1,19 @@
-
 import 'dart:convert';
 
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:http/http.dart' as http;
 import 'package:safe_campus/features/core/data/models/register_data.dart';
 import 'package:safe_campus/features/core/data/models/user_model.dart';
 
 class AuthService {
   //register
+  
+
   Future<UserModel> register(RegisterData data) async {
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+    String? token = await messaging.getToken();
     final url = 'https://safe-campus-backend.onrender.com/api/auth/register';
     try {
       final response = await http.post(
@@ -18,6 +24,7 @@ class AuthService {
           "email": data.email,
           "password": data.password,
           "studentId": data.studentId,
+          "deviceToken":token,
         }),
       );
 
@@ -27,7 +34,7 @@ class AuthService {
           return UserModel.fromJson(json);
         } else {
           print('Failed to register: ${response.body}');
-           throw Exception('Failed to register: ${response.body}');
+          throw Exception('Failed to register: ${response.body}');
         }
       } else {
         print('Failed to register: ${response.body}');
