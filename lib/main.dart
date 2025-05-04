@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:safe_campus/features/core/data/repositories/auth_repo.dart';
@@ -8,7 +9,9 @@ import 'features/core/presentation/screens/intro_page.dart';
 import 'features/core/presentation/screens/sign_in_page.dart';
 import 'features/core/presentation/screens/register_page.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  //await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -17,12 +20,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-     final authRepo = AuthRepo();
+    final authRepo = AuthRepo();
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context)=> AuthBloc(authRepo: authRepo)),
-        BlocProvider(
-          create: (context) => NavigationCubit(),),
+        BlocProvider(create: (context) => AuthBloc(authRepo: authRepo)),
+        BlocProvider(create: (context) => NavigationCubit()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -35,7 +37,7 @@ class MyApp extends StatelessWidget {
         routes: {
           '/': (context) => const IntroPage(),
           '/signin': (context) => const SignInPage(),
-          '/register': (context) =>  RegisterPage(),
+          '/register': (context) => RegisterPage(),
           '/home': (context) => const Home(),
         },
       ),
